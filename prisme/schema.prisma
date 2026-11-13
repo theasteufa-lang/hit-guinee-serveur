@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ARTIST
+  ADMIN
+}
+
+enum TrackType {
+  AUDIO
+  VIDEO
+}
+
+enum TrackStatus {
+  DRAFT
+  PUBLISHED
+  PRIVATE
+}
+
+enum PurchaseStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+enum WithdrawalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PAID
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(USER)
+  balance      Int      @default(0)
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  tracks       Track[]  @relation("ArtistTracks")
+  purchases    Purchase[] @relation("BuyerPurchases")
+  sales        Purchase[] @relation("SellerSales")
+  withdrawals  Withdrawal[]
+}
+
+model Track {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  type        TrackType
+  status      TrackStatus @default(DRAFT)
+  price       Int         @default(0)
+  fileUrl     String
+  coverUrl    String?
+  isPrivate   Boolean     @default(false)
+  artistId    String
+  artist      User        @relation("ArtistTracks", fields: [artistId], references: [id])
+  purchases   Purchase[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Purchase {
+  id        String         @id @default(cuid())
+  buyerId   String
+  buyer     User           @relation("BuyerPurchases", fields: [buyerId], references: [id])
+  sellerId  String
+  seller    User           @relation("SellerSales", fields: [sellerId], references: [id])
+  trackId   String
+  track     Track          @relation(fields: [trackId], references: [id])
+  amount    Int
+  status    PurchaseStatus @default(PENDING)
+  method    String         @default("ORANGE_MONEY")
+  reference String?
+  createdAt DateTime       @default(now())
+}
+
+model Withdrawal {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id])
+  amount    Int
+  phone     String
+  method    String           @default("ORANGE_MONEY")
+  status    WithdrawalStatus @default(PENDING)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
