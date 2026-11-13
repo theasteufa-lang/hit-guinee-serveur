@@ -1,35 +1,35 @@
 {
-  "name": "hit-guinee-server",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "engines": {
-    "node": "20.x"
-  },
-  "scripts": {
-    "dev": "node --watch src/index.js",
-    "start": "node src/index.js",
-    "admin:create": "node src/create-admin.js",
-    "db:deploy": "prisma migrate deploy",
-    "db:studio": "prisma studio",
-    "postinstall": "prisma generate"
-  },
-  "dependencies": {
-    "@prisma/client": "^6.8.2",
-    "@prisma/adapter-pg": "^6.8.2",
-    "bcryptjs": "^3.0.2",
-    "connect-pg-simple": "^10.0.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "express-rate-limit": "^7.5.0",
-    "express-session": "^1.18.1",
-    "helmet": "^8.1.0",
-    "multer": "^1.4.5-lts.1",
-    "pg": "^8.13.1",
-    "zod": "^3.24.4"
-  },
-  "devDependencies": {
-    "prisma": "^6.8.2"
-  }
+"name": "hit-guinee-server",
+"version": "1.0.0",
+"private": true,
+"type": "module",
+"engines": {
+"node": "20.x"
+},
+"scripts": {
+"dev": "node --watch src/index.js",
+"start": "node src/index.js",
+"admin:create": "node src/create-admin.js",
+"db:deploy": "prisma migrate deploy --schema=./prisme/schema.prisma",
+"db:studio": "prisma studio --schema=./prisme/schema.prisma",
+"postinstall": "prisma generate --schema=./prisme/schema.prisma"
+},
+"dependencies": {
+"@prisma/client": "^6.8.2",
+"@prisma/adapter-pg": "^6.8.2",
+"bcryptjs": "^3.0.2",
+"connect-pg-simple": "^10.0.0",
+"cors": "^2.8.5",
+"dotenv": "^16.5.0",
+"express": "^5.1.0",
+"express-rate-limit": "^7.5.0",
+"express-session": "^1.18.1",
+"helmet": "^8.1.0",
+"multer": "^1.4.5-lts.1",
+"pg": "^8.13.1",
+"zod": "^3.24.4"
+},
+"devDependencies": {
+"prisma": "^6.8.2"
+}
 }
